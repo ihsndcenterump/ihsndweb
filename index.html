@@ -42,10 +42,12 @@
 
         /* Header Layout */
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 40px;
+header, main, footer {
+    width: 100%;
+    max-width: 1150px; /* Giới hạn chiều rộng để 2 bên xích lại gần nhau */
+    margin-left: auto; /* Tự động canh giữa lề trái */
+    margin-right: auto; /* Tự động canh giữa lề phải */
+}
         }
 
         .logos {
