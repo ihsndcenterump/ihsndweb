@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IHSND UMP - Cổng Thông Tin Thành Viên</title>
+    <title>IHSND UMP - Đăng Nhập Hệ Thống</title>
     <style>
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -23,30 +23,58 @@
             border-radius: 12px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.1);
             text-align: center;
-            max-width: 500px;
+            max-width: 400px;
             width: 90%;
         }
         h1 {
             color: #0056b3;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+            font-size: 24px;
         }
         h2 {
             color: #4a5568;
-            font-size: 1.2rem;
+            font-size: 16px;
             margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: normal;
         }
-        p {
-            color: #718096;
-            line-height: 1.6;
-            margin-bottom: 30px;
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            box-sizing: border-box; /* Đảm bảo padding không làm tràn khung */
+            font-size: 14px;
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #0056b3;
+            box-shadow: 0 0 0 2px rgba(0,86,179,0.2);
         }
         .btn {
             background-color: #0056b3;
             color: white;
-            padding: 12px 24px;
-            text-decoration: none;
+            padding: 12px;
+            width: 100%;
+            border: none;
             border-radius: 6px;
             font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
             transition: background-color 0.3s ease;
         }
         .btn:hover {
@@ -57,9 +85,21 @@
 <body>
     <div class="container">
         <h1>IHSND UMP</h1>
-        <h2>Cổng Thông Tin Quản Lý Thành Viên</h2>
-        <p>Chào mừng bạn đến với hệ thống nội bộ của Trung tâm Phát triển Mạng lưới Sinh viên Y khoa Quốc tế - Đại học Y Dược TP.HCM.</p>
-        <a href="#" class="btn">Đăng nhập hệ thống</a>
+        <h2>Cổng Thông Tin Thành Viên</h2>
+        
+        <form action="#" method="POST">
+            <div class="form-group">
+                <label for="username">Tên đăng nhập</label>
+                <input type="text" id="username" name="username" placeholder="Nhập mã thành viên..." required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" name="password" placeholder="Nhập mật khẩu..." required>
+            </div>
+            
+            <button type="submit" class="btn">Đăng Nhập</button>
+        </form>
     </div>
 </body>
 </html>
