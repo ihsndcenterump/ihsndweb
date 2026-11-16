@@ -25,12 +25,19 @@
         }
 
         body {
-            background-color: var(--primary-bg);
-            color: var(--text-dark);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 20px 40px;
+    background-image: url('background1.jpg'); /* Đổi tên này nếu file của bạn tên khác */
+    background-size: cover;        /* Phóng to ảnh lấp đầy màn hình */
+    background-position: center;   /* Căn giữa ảnh */
+    background-attachment: fixed;  /* Cố định ảnh nền khi cuộn trang */
+    background-repeat: no-repeat;  /* Không lặp lại ảnh */
+
+    /* Giữ nguyên các thuộc tính bên dưới */
+    color: var(--text-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 40px;
+}
         }
 
         /* Header Layout */
