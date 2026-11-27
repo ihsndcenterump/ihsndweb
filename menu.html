@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Trang chủ - IHSND UMP</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body class="bg-menu">
   <div id="topUserBar" class="top-user-bar"></div>
 
   <div class="menu-grid" id="menuGrid">
-    <!-- Mục 1: Đã hoàn thiện -->
     <a href="member.html" class="menu-card" data-module="member">
       <div class="menu-card-header">THÔNG TIN THÀNH VIÊN</div>
       <div class="menu-card-body">
@@ -18,7 +19,6 @@
       </div>
     </a>
 
-    <!-- 5 Mục tiếp theo: Sẵn sàng gắn link khi bạn bổ sung -->
     <a href="#" class="menu-card" data-module="activities" onclick="comingSoon(event, 'Xác nhận hoạt động')">
       <div class="menu-card-header">XÁC NHẬN HOẠT ĐỘNG</div>
       <div class="menu-card-body">
@@ -57,18 +57,18 @@
 
   <script src="app.js"></script>
   <script>
-    const currentUser = requireAuth();
-
-    // Khóa các ô mà tài khoản hiện tại không có quyền truy cập
-    if (currentUser && currentUser.role !== "admin") {
-      document.querySelectorAll(".menu-card").forEach(card => {
-        const mod = card.getAttribute("data-module");
-        if (!currentUser.permissions.includes(mod)) {
-          card.classList.add("locked");
-          card.setAttribute("title", "Tài khoản của bạn không có quyền truy cập mục này");
-        }
-      });
-    }
+    (async () => {
+      const currentUser = await requireAuth();
+      if (currentUser && currentUser.role !== "admin") {
+        document.querySelectorAll(".menu-card").forEach(card => {
+          const mod = card.getAttribute("data-module");
+          if (!(currentUser.permissions || []).includes(mod)) {
+            card.classList.add("locked");
+            card.setAttribute("title", "Tài khoản của bạn không có quyền truy cập mục này");
+          }
+        });
+      }
+    })();
 
     function comingSoon(e, name) {
       e.preventDefault();
