@@ -69,7 +69,6 @@ const DEFAULT_USERS = [
 
 const SESSION_KEY = "IHSND_CURRENT_USER";
 
-// Lấy toàn bộ danh sách tài khoản từ Firestore
 async function getUsers() {
   const snap = await db.collection("users").get();
   if (snap.empty) {
@@ -84,13 +83,11 @@ async function getUsers() {
   return snap.docs.map(doc => doc.data());
 }
 
-// Lưu 1 tài khoản lên Firestore
 async function saveUser(userObj) {
   const docId = userObj.username.trim().toLowerCase();
   await db.collection("users").doc(docId).set(userObj, { merge: true });
 }
 
-// Đăng nhập
 async function login(username, password, remember) {
   const users = await getUsers();
   const found = users.find(
@@ -103,7 +100,6 @@ async function login(username, password, remember) {
   return found;
 }
 
-// Lấy thông tin người đang đăng nhập từ Firestore
 async function getCurrentUser() {
   const username = sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY);
   if (!username) return null;
@@ -111,7 +107,6 @@ async function getCurrentUser() {
   return doc.exists ? doc.data() : null;
 }
 
-// Bắt buộc đăng nhập
 async function requireAuth(requiredModule = null) {
   const user = await getCurrentUser();
   if (!user) {
@@ -123,26 +118,42 @@ async function requireAuth(requiredModule = null) {
     window.location.href = "menu.html";
     return null;
   }
-  renderTopUserBar(user);
+  renderAppLayout(user);
   return user;
 }
 
-// Đăng xuất
 function logout() {
   sessionStorage.removeItem(SESSION_KEY);
   localStorage.removeItem(SESSION_KEY);
   window.location.href = "index.html";
 }
 
-// Hiển thị thanh tài khoản góc trên phải
-function renderTopUserBar(user) {
-  const bar = document.getElementById("topUserBar");
-  if (!bar) return;
-  bar.innerHTML = `
-    <span>${user.fullName} (${user.role.toUpperCase()})</span>
-    <button class="icon-btn" title="Thông báo" onclick="alert('Chưa có thông báo mới.')">🔔</button>
-    <button class="icon-btn" title="Đăng xuất" onclick="logout()">↪️</button>
-  `;
+// Tự động vẽ Header (thanh trắng mờ + logo.svg + tài khoản) & Footer chung cho mọi trang con
+function renderAppLayout(user) {
+  const headerEl = document.getElementById("appHeader");
+  if (headerEl) {
+    headerEl.className = "sub-header";
+    headerEl.innerHTML = `
+      <a href="menu.html" class="sub-header-brand" title="Về trang Menu">
+        <img src="logo.svg" alt="Logo IHSND" class="sub-header-logo" />
+        <span class="sub-header-title">TRUNG TÂM PHÁT TRIỂN MẠNG LƯỚI SINH VIÊN QUỐC TẾ</span>
+      </a>
+      <div class="sub-header-user">
+        <span>${user.fullName} (${user.role.toUpperCase()})</span>
+        <button class="icon-btn" title="Thông báo" onclick="alert('Chưa có thông báo mới.')">🔔</button>
+        <button class="icon-btn" title="Đăng xuất" onclick="logout()">↪️</button>
+      </div>
+    `;
+  }
+
+  const footerEl = document.getElementById("appFooter");
+  if (footerEl) {
+    footerEl.className = "app-footer";
+    footerEl.innerHTML = `
+      <div>© 2026 TRUNG TÂM PHÁT TRIỂN MẠNG LƯỚI SINH VIÊN QUỐC TẾ</div>
+      <div>ĐẠI HỌC Y DƯỢC THÀNH PHỐ HỒ CHÍ MINH</div>
+    `;
+  }
 }
 
 // ============================================================
@@ -152,7 +163,7 @@ function downloadExcelTemplate() {
   const sample = [
     {
       username: "21120002",
-      password: "", // Để trống nếu không muốn đổi mật khẩu của tài khoản đã có
+      password: "",
       role: "member",
       permissions: "member,activities,programs,info-station,milestones,contact",
       fullName: "Trần Thị B",
@@ -214,7 +225,6 @@ function importUsersFromExcel(file, onSuccess) {
           avatar: String(row.avatar || "")
         };
 
-        // Chỉ cập nhật mật khẩu nếu Admin điền vào Excel, hoặc là tài khoản tạo mới lần đầu
         if (row.password && String(row.password).trim() !== "") {
           userObj.password = String(row.password).trim();
         } else if (!existingSet.has(usernameStr.toLowerCase())) {
