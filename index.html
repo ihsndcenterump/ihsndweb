@@ -8,55 +8,73 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
-<body class="bg-login">
-  <div class="login-container">
-    <div class="intro-box">
-      <p>
-        Trung tâm Phát triển Mạng lưới Sinh viên Quốc tế - Đại học Y Dược Thành phố Hồ Chí Minh
-        được thành lập năm 2023, với mục tiêu và sứ mệnh mong muốn mang đến môi trường và các cơ hội
-        kết nối, hội nhập cho sinh viên Đại học Y Dược Thành phố Hồ Chí Minh.
-      </p>
+<body>
+  <div class="login-page-wrap">
+    <!-- Thanh trắng mờ bo tròn trên cùng -->
+    <header class="login-header">
+      <img src="logo.svg" alt="Logo IHSND UMP" class="login-header-logo" />
+      <div class="login-header-text">
+        <div class="org-line1">ĐOÀN ĐẠI HỌC Y DƯỢC THÀNH PHỐ HỒ CHÍ MINH</div>
+        <div class="org-line2">TRUNG TÂM PHÁT TRIỂN MẠNG LƯỚI SINH VIÊN QUỐC TẾ</div>
+        <div class="org-line3">INTERNATIONAL HEALTH STUDENT NETWORK DEVELOPMENT CENTER</div>
+      </div>
+    </header>
 
-      <h3>LIÊN HỆ VÀ HỖ TRỢ</h3>
-      <ul>
-        <li>Facebook: Mạng lưới Sinh viên Quốc tế - Đại học Y Dược TP. Hồ Chí Minh</li>
-        <li>Gmail: ihsnd.center.ump@gmail.com</li>
-        <li>Outlook: ihsnd.center.ump@gmail.com</li>
-      </ul>
+    <!-- Nội dung chính 2 cột -->
+    <main class="login-container">
+      <div class="intro-box">
+        <p>
+          Trung tâm Phát triển Mạng lưới Sinh viên Quốc tế - Đại học Y Dược Thành phố Hồ Chí Minh
+          được thành lập năm 2023, với mục tiêu và sứ mệnh mong muốn mang đến môi trường và các cơ hội
+          kết nối, hội nhập cho sinh viên Đại học Y Dược Thành phố Hồ Chí Minh.
+        </p>
 
-      <p class="note">
-        Trường hợp quên mật khẩu, vui lòng gửi email kèm MSSV và thông tin tài khoản.
-        Hệ thống <strong>không cấp lại mật khẩu tự động qua website.</strong>
-      </p>
-    </div>
+        <h3>LIÊN HỆ VÀ HỖ TRỢ</h3>
+        <ul>
+          <li>Facebook: Mạng lưới Sinh viên Quốc tế - Đại học Y Dược TP. Hồ Chí Minh</li>
+          <li>Gmail: ihsnd.center.ump@gmail.com</li>
+          <li>Outlook: ihsnd.center.ump@gmail.com</li>
+        </ul>
 
-    <div class="login-card">
-      <h1>ĐĂNG NHẬP</h1>
-      <p class="subtitle">Đăng nhập để tiếp tục</p>
+        <p class="note">
+          Trường hợp quên mật khẩu, vui lòng gửi email kèm MSSV và thông tin tài khoản.
+          Hệ thống <strong>không cấp lại mật khẩu tự động qua website.</strong>
+        </p>
+      </div>
 
-      <form id="loginForm">
-        <div class="form-group">
-          <label for="username">TÊN ĐĂNG NHẬP/MSSV</label>
-          <input type="text" id="username" required autocomplete="username" />
-        </div>
+      <div class="login-card">
+        <h1>ĐĂNG NHẬP</h1>
+        <p class="subtitle">Đăng nhập để tiếp tục</p>
 
-        <div class="form-group">
-          <label for="password">MẬT KHẨU</label>
-          <div class="password-wrapper">
-            <input type="password" id="password" required autocomplete="current-password" />
-            <button type="button" id="togglePwd" class="toggle-pwd-btn" title="Hiện/Ẩn mật khẩu">👁️</button>
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="username">TÊN ĐĂNG NHẬP/MSSV</label>
+            <input type="text" id="username" required autocomplete="username" />
           </div>
-        </div>
 
-        <label class="remember-row">
-          <input type="checkbox" id="rememberMe" />
-          <span>Ghi nhớ phiên đăng nhập</span>
-        </label>
+          <div class="form-group">
+            <label for="password">MẬT KHẨU</label>
+            <div class="password-wrapper">
+              <input type="password" id="password" required autocomplete="current-password" />
+              <button type="button" id="togglePwd" class="toggle-pwd-btn" title="Hiện/Ẩn mật khẩu">👁️</button>
+            </div>
+          </div>
 
-        <button type="submit" id="loginBtn" class="btn-primary">Đăng nhập hệ thống →</button>
-        <div id="errorMsg" class="error-msg"></div>
-      </form>
-    </div>
+          <label class="remember-row">
+            <input type="checkbox" id="rememberMe" />
+            <span>Ghi nhớ phiên đăng nhập</span>
+          </label>
+
+          <button type="submit" id="loginBtn" class="btn-primary">Đăng nhập hệ thống →</button>
+          <div id="errorMsg" class="error-msg"></div>
+        </form>
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      <div>© 2026 TRUNG TÂM PHÁT TRIỂN MẠNG LƯỚI SINH VIÊN QUỐC TẾ</div>
+      <div>ĐẠI HỌC Y DƯỢC THÀNH PHỐ HỒ CHÍ MINH</div>
+    </footer>
   </div>
 
   <script src="app.js"></script>
