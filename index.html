@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Đăng nhập - IHSND UMP</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body class="bg-login">
   <div class="login-container">
-    <!-- Cột trái: Giới thiệu & Liên hệ -->
     <div class="intro-box">
       <p>
         Trung tâm Phát triển Mạng lưới Sinh viên Quốc tế - Đại học Y Dược Thành phố Hồ Chí Minh
@@ -29,7 +30,6 @@
       </p>
     </div>
 
-    <!-- Cột phải: Khung đăng nhập -->
     <div class="login-card">
       <h1>ĐĂNG NHẬP</h1>
       <p class="subtitle">Đăng nhập để tiếp tục</p>
@@ -53,7 +53,7 @@
           <span>Ghi nhớ phiên đăng nhập</span>
         </label>
 
-        <button type="submit" class="btn-primary">Đăng nhập hệ thống →</button>
+        <button type="submit" id="loginBtn" class="btn-primary">Đăng nhập hệ thống →</button>
         <div id="errorMsg" class="error-msg"></div>
       </form>
     </div>
@@ -61,11 +61,12 @@
 
   <script src="app.js"></script>
   <script>
-    if (getCurrentUser()) {
-      window.location.href = "menu.html";
-    }
+    (async () => {
+      if (await getCurrentUser()) {
+        window.location.href = "menu.html";
+      }
+    })();
 
-    // Nút hiện/ẩn mật khẩu
     const pwdInput = document.getElementById("password");
     const toggleBtn = document.getElementById("togglePwd");
     toggleBtn.addEventListener("click", function () {
@@ -74,17 +75,31 @@
       toggleBtn.textContent = isHidden ? "🙈" : "👁️";
     });
 
-    document.getElementById("loginForm").addEventListener("submit", function (e) {
+    document.getElementById("loginForm").addEventListener("submit", async function (e) {
       e.preventDefault();
-      const u = document.getElementById("username").value;
-      const p = document.getElementById("password").value;
-      const rem = document.getElementById("rememberMe").checked;
+      const btn = document.getElementById("loginBtn");
+      const errEl = document.getElementById("errorMsg");
+      btn.disabled = true;
+      btn.textContent = "Đang kiểm tra...";
+      errEl.textContent = "";
 
-      const user = login(u, p, rem);
-      if (user) {
-        window.location.href = "menu.html";
-      } else {
-        document.getElementById("errorMsg").textContent = "Sai tên đăng nhập hoặc mật khẩu!";
+      try {
+        const u = document.getElementById("username").value;
+        const p = document.getElementById("password").value;
+        const rem = document.getElementById("rememberMe").checked;
+
+        const user = await login(u, p, rem);
+        if (user) {
+          window.location.href = "menu.html";
+        } else {
+          errEl.textContent = "Sai tên đăng nhập hoặc mật khẩu!";
+        }
+      } catch (err) {
+        errEl.textContent = "Lỗi kết nối hệ thống. Vui lòng thử lại!";
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Đăng nhập hệ thống →";
       }
     });
   </script>
