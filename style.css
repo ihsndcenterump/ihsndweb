@@ -4,8 +4,9 @@
   --navy: #1b3664;
   --navy-dark: #122546;
   --text-main: #111827;
-  --text-muted: #374151;
-  --glass-bg: rgba(255, 255, 255, 0.72);
+  --text-muted: #4b5563;
+  --glass-bg: rgba(255, 255, 255, 0.74);
+  --header-bg: rgba(255, 255, 255, 0.78);
   --white: #ffffff;
   --danger: #dc2626;
   --success: #16a34a;
@@ -21,42 +22,122 @@
 body {
   min-height: 100vh;
   color: var(--text-main);
-  background-color: #9cb6e0;
-  background-repeat: no-repeat;
-  background-position: top center;
-  background-size: cover;
-  background-attachment: scroll; /* Nền cuộn theo trang, không bị đứng yên */
+  background: linear-gradient(125deg, #c7e4ea 0%, #a9c1e5 50%, #8f9fd9 100%);
+  background-attachment: fixed;
   display: flex;
   flex-direction: column;
-  position: relative;
 }
 
-/* Nền trang 1 (Login) */
-body.bg-login {
-  background-image: url('bgnew.svg');
-  justify-content: center;
-  padding: 150px 6% 90px;
-}
-
-/* Nền trang 2 trở đi (Menu & các trang con) */
-body.bg-menu {
-  background-image: url('bg%20menu.svg');
-  padding: 125px 6% 90px;
-}
-
-/* Thanh tên tài khoản nằm gọn trên thanh ngang góc phải */
-.top-user-bar {
-  position: absolute;
-  top: 22px;
-  right: 40px;
+/* ================= HEADER TRANG 1 (THANH TRẮNG MỜ BO TRÒN) ================= */
+.login-page-wrap {
+  flex: 1;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 24px 4% 20px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.login-header {
+  width: 100%;
+  background: var(--header-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 28px;
+  padding: 18px 36px;
+  display: flex;
   align-items: center;
-  gap: 14px;
+  justify-content: space-between;
+  gap: 24px;
+  box-shadow: 0 6px 24px rgba(27, 54, 100, 0.08);
+  margin-bottom: 32px;
+}
+
+.login-header-logo {
+  height: 78px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.login-header-text {
+  flex: 1;
+  text-align: center;
+}
+
+.login-header-text .org-line1 {
+  font-size: clamp(14px, 1.55vw, 22px);
+  font-weight: 800;
+  color: var(--navy-dark);
+  letter-spacing: 0.3px;
+  margin-bottom: 4px;
+}
+
+.login-header-text .org-line2 {
+  font-size: clamp(15px, 1.7vw, 24px);
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: 0.3px;
+  margin-bottom: 6px;
+}
+
+.login-header-text .org-line3 {
+  font-size: clamp(11px, 1.15vw, 16px);
+  font-weight: 500;
+  color: #5b6b82;
+  letter-spacing: 0.4px;
+}
+
+/* ================= HEADER TRANG 2 TRỞ ĐI (THANH TRẮNG MỜ TRẢI NGANG) ================= */
+.sub-header {
+  width: 100%;
+  background: var(--header-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 12px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: 0 3px 16px rgba(27, 54, 100, 0.07);
+  position: sticky;
+  top: 0;
   z-index: 100;
+}
+
+.sub-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+  color: var(--navy-dark);
+}
+
+.sub-header-logo {
+  height: 46px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.sub-header-title {
+  font-size: clamp(13px, 1.35vw, 19px);
+  font-weight: 800;
+  color: var(--navy-dark);
+  letter-spacing: 0.3px;
+}
+
+.sub-header-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   color: var(--navy);
   font-weight: 700;
-  font-size: 15px;
+  font-size: 14.5px;
 }
 
 .icon-btn {
@@ -67,13 +148,39 @@ body.bg-menu {
   font-size: 19px;
   display: flex;
   align-items: center;
-  padding: 4px;
-  border-radius: 6px;
+  padding: 5px;
+  border-radius: 8px;
   transition: background 0.2s;
 }
 
 .icon-btn:hover {
   background: rgba(27, 54, 100, 0.1);
+}
+
+/* Khung nội dung chính cho các trang con */
+.page-main {
+  flex: 1;
+  width: 100%;
+  padding: 36px 5% 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.page-main.align-top {
+  justify-content: flex-start;
+}
+
+/* ================= FOOTER CHUNG ================= */
+.app-footer {
+  width: 100%;
+  text-align: center;
+  padding: 18px 16px 24px;
+  color: rgba(27, 54, 100, 0.68);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.55;
+  margin-top: auto;
 }
 
 /* Nút quay lại Menu */
@@ -98,71 +205,71 @@ body.bg-menu {
 .login-container {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
-  gap: 56px;
+  gap: 52px;
   align-items: center;
-  max-width: 1320px;
   width: 100%;
-  margin: 0 auto;
+  margin: auto 0;
 }
 
 .intro-box p {
-  font-size: 22px;
+  font-size: 20px;
   line-height: 1.65;
-  margin-bottom: 26px;
+  margin-bottom: 24px;
   text-align: justify;
 }
 
 .intro-box h3 {
-  font-size: 24px;
+  font-size: 22px;
   color: var(--navy);
   font-weight: 800;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .intro-box ul {
-  margin-left: 24px;
-  margin-bottom: 24px;
-  font-size: 17px;
+  margin-left: 22px;
+  margin-bottom: 22px;
+  font-size: 16px;
   line-height: 1.8;
 }
 
 .intro-box .note {
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.6;
 }
 
 .login-card {
   background: var(--glass-bg);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: 26px;
-  padding: 44px 48px;
+  padding: 40px 44px;
   box-shadow: 0 10px 30px rgba(27, 54, 100, 0.12);
 }
 
 .login-card h1 {
   text-align: center;
   color: var(--navy);
-  font-size: 34px;
+  font-size: 32px;
   font-weight: 800;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .login-card .subtitle {
   text-align: center;
   color: var(--text-muted);
-  font-size: 17px;
-  margin-bottom: 28px;
+  font-size: 16px;
+  margin-bottom: 26px;
 }
 
 .form-group {
-  margin-bottom: 22px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
   display: block;
   font-weight: 700;
   color: var(--navy);
-  font-size: 16px;
+  font-size: 15px;
   margin-bottom: 8px;
 }
 
@@ -172,19 +279,19 @@ body.bg-menu {
 .form-group input[type="date"],
 .form-group textarea {
   width: 100%;
-  padding: 14px 18px;
+  padding: 13px 16px;
   border: 1.5px solid rgba(27, 54, 100, 0.15);
   border-radius: 14px;
-  font-size: 16px;
+  font-size: 15.5px;
   background: var(--white);
   outline: none;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group textarea:focus {
   border-color: var(--navy);
 }
 
-/* Ô mật khẩu có nút con mắt hiện/ẩn */
 .password-wrapper {
   position: relative;
   display: flex;
@@ -210,8 +317,8 @@ body.bg-menu {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 16px 0 26px;
-  font-size: 16px;
+  margin: 14px 0 24px;
+  font-size: 15px;
   color: var(--text-muted);
 }
 
@@ -220,9 +327,9 @@ body.bg-menu {
   background: var(--navy);
   color: var(--white);
   border: none;
-  padding: 15px 22px;
+  padding: 14px 22px;
   border-radius: 999px;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
@@ -244,10 +351,10 @@ body.bg-menu {
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 36px;
+  gap: 34px;
   max-width: 1180px;
   width: 100%;
-  margin: auto;
+  margin: 0 auto;
 }
 
 .menu-card {
@@ -278,16 +385,16 @@ body.bg-menu {
   background: var(--navy);
   color: var(--white);
   text-align: center;
-  padding: 14px 12px;
+  padding: 15px 12px;
   font-weight: 800;
   font-size: 16px;
   letter-spacing: 0.3px;
 }
 
 .menu-card-body {
-  padding: 20px 22px 26px;
+  padding: 22px 24px 28px;
   font-size: 15px;
-  line-height: 1.55;
+  line-height: 1.6;
   color: var(--text-main);
   flex: 1;
 }
@@ -295,22 +402,22 @@ body.bg-menu {
 /* ================= TRANG 3: THÔNG TIN THÀNH VIÊN ================= */
 .page-title {
   text-align: center;
-  font-size: 34px;
+  font-size: clamp(24px, 2.6vw, 34px);
   font-weight: 800;
   color: #000;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   letter-spacing: 0.5px;
 }
 
 .member-wrapper {
-  max-width: 1040px;
+  max-width: 1080px;
   width: 100%;
   margin: 0 auto;
 }
 
 .member-layout {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 270px 1fr;
   gap: 44px;
   align-items: start;
 }
@@ -330,7 +437,7 @@ body.bg-menu {
 }
 
 .quote-text {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   line-height: 1.45;
   color: #111;
@@ -346,7 +453,7 @@ body.bg-menu {
   display: flex;
   align-items: baseline;
   gap: 10px;
-  font-size: 18px;
+  font-size: 17.5px;
 }
 
 .info-label {
@@ -366,7 +473,7 @@ body.bg-menu {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
   align-items: center;
   justify-content: space-between;
 }
@@ -391,11 +498,12 @@ body.bg-menu {
 .btn-sm:hover { opacity: 0.9; }
 
 .admin-panel {
-  margin-top: 32px;
+  margin-top: 36px;
   background: rgba(255, 255, 255, 0.88);
   border-radius: 16px;
   padding: 22px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
 }
 
 .admin-panel h3 {
@@ -409,6 +517,7 @@ body.bg-menu {
   border-collapse: collapse;
   font-size: 14px;
   margin-top: 12px;
+  min-width: 600px;
 }
 
 .admin-table th, .admin-table td {
@@ -446,21 +555,56 @@ body.bg-menu {
   overflow-y: auto;
 }
 
-@media (max-width: 900px) {
-  body.bg-login,
-  body.bg-menu {
-    background-image: linear-gradient(135deg, #c2e0e8 0%, #a5bce4 50%, #899bd9 100%);
-    padding: 80px 5% 40px;
+/* ================= RESPONSIVE (IPAD DỌC & ĐIỆN THOẠI) ================= */
+@media (max-width: 960px) {
+  .login-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 18px 20px;
+    gap: 14px;
+    border-radius: 22px;
   }
-  .top-user-bar {
-    top: 16px;
-    right: 16px;
-    font-size: 13px;
+  .login-header-logo {
+    height: 60px;
   }
-  .login-container, .menu-grid, .member-layout {
+  .login-container {
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 28px;
+  }
+  .intro-box p { font-size: 16.5px; }
+  .login-card { padding: 28px 24px; }
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .member-layout {
+    grid-template-columns: 1fr;
+    gap: 28px;
   }
   .info-row { flex-direction: column; gap: 2px; }
   .info-label { min-width: unset; }
+}
+
+@media (max-width: 640px) {
+  .sub-header {
+    padding: 12px 16px;
+    justify-content: center;
+  }
+  .sub-header-brand {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .sub-header-logo { height: 42px; }
+  .sub-header-user {
+    width: 100%;
+    justify-content: center;
+    padding-top: 6px;
+    border-top: 1px solid rgba(27, 54, 100, 0.1);
+  }
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
 }
