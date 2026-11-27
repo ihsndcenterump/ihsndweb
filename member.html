@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thông tin thành viên - IHSND UMP</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Thư viện đọc/ghi file Excel -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+</head>
+<body class="bg-menu">
+  <div id="topUserBar" class="top-user-bar"></div>
+
+  <div class="member-wrapper">
+    <div class="action-bar">
+      <a href="menu.html" class="back-btn">← Quay lại Menu</a>
+      <div>
+        <button class="btn-sm" onclick="openEditModal()">✏️ Chỉnh sửa thông tin</button>
+      </div>
+    </div>
+
+    <h1 class="page-title">THÔNG TIN THÀNH VIÊN</h1>
+
+    <div class="member-layout">
+      <!-- Cột trái: Ảnh + Quote -->
+      <div class="avatar-box">
+        <img id="mAvatar" class="avatar-img" src="https://via.placeholder.com/240x280?text=Avatar" alt="Avatar" />
+        <p id="mQuote" class="quote-text">“QUOTE YÊU THÍCH, CHÂM NGÔN SỐNG”</p>
+      </div>
+
+      <!-- Cột phải: Các trường thông tin -->
+      <div class="info-list">
+        <div class="info-row"><span class="info-label">HỌ VÀ TÊN:</span><span id="mFullName" class="info-value"></span></div>
+        <div class="info-row"><span class="info-label">LỚP:</span><span id="mClass" class="info-value"></span></div>
+        <div class="info-row"><span class="info-label">TRƯỜNG/KHOA:</span><span id="mFaculty" class="info-value"></span></div>
+        <div class="info-row"><span class="info-label">MÃ SỐ SINH VIÊN:</span><span id="mMssv" class="info-value"></span></div>
+        <div class="info-row"><span class="info-label">NGÀY SINH:</span><span id="mDob" class="info-value"></span></div>
+        <div class="info-row"><span class="info-label">LÀ THÀNH VIÊN TRUNG TÂM TỪ NGÀY:</span><span id="mJoinDate" class="info-value"></span></div>
+        <div class="info-row"><span class="info-label">SĐT LIÊN LẠC:</span><span id="mPhone" class="info-value"></span></div>
+        <div class="info-row"><span class="info-label">EMAIL:</span><span id="mEmail" class="info-value"></span></div>
+      </div>
+    </div>
+
+    <!-- KHU VỰC RIÊNG CỦA ADMIN: UPLOAD EXCEL & QUẢN LÝ TÀI KHOẢN -->
+    <div id="adminPanel" class="admin-panel" style="display: none;">
+      <h3>⚙️ Bảng điều khiển Admin — Đồng bộ Excel & Phân quyền</h3>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+        <button class="btn-sm secondary" onclick="downloadExcelTemplate()">📥 Tải file Excel mẫu</button>
+        <label class="btn-sm" style="cursor: pointer;">
+          📤 Upload file Excel đồng bộ
+          <input type="file" id="excelInput" accept=".xlsx,.xls" style="display: none;" />
+        </label>
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Tài khoản</th>
+            <th>Họ và tên</th>
+            <th>Vai trò</th>
+            <th>Quyền truy cập</th>
+            <th>Xem hồ sơ</th>
+          </tr>
+        </thead>
+        <tbody id="adminUserTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal chỉnh sửa thông tin cá nhân -->
+  <div id="editModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3 style="color: var(--navy); margin-bottom: 16px;">Chỉnh sửa thông tin</h3>
+      <form id="editForm">
+        <div class="form-group"><label>Họ và tên</label><input type="text" id="eFullName" /></div>
+        <div class="form-group"><label>Lớp</label><input type="text" id="eClass" /></div>
+        <div class="form-group"><label>Trường/Khoa</label><input type="text" id="eFaculty" /></div>
+        <div class="form-group"><label>Ngày sinh</label><input type="date" id="eDob" /></div>
+        <div class="form-group"><label>SĐT liên lạc</label><input type="text" id="ePhone" /></div>
+        <div class="form-group"><label>Email</label><input type="email" id="eEmail" /></div>
+        <div class="form-group"><label>Quote yêu thích</label><input type="text" id="eQuote" /></div>
+        <div class="form-group"><label>Link ảnh đại diện (URL)</label><input type="text" id="eAvatar" placeholder="Dán link ảnh..." /></div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px;">
+          <button type="button" class="btn-sm secondary" onclick="closeEditModal()">Hủy</button>
+          <button type="submit" class="btn-sm">Lưu thay đổi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    const currentUser = requireAuth("member");
+    let viewingUser = currentUser;
+
+    function renderProfile(user) {
+      viewingUser = user;
+      document.getElementById("mFullName").textContent = user.fullName || "-";
+      document.getElementById("mClass").textContent = user.className || "-";
+      document.getElementById("mFaculty").textContent = user.faculty || "-";
+      document.getElementById("mMssv").textContent = user.mssv || "-";
+      document.getElementById("mDob").textContent = user.dob || "-";
+      document.getElementById("mJoinDate").textContent = user.joinDate || "-";
+      document.getElementById("mPhone").textContent = user.phone || "-";
+      document.getElementById("mEmail").textContent = user.email || "-";
+      document.getElementById("mQuote").textContent = user.quote ? `“${user.quote}”` : "“Chưa có châm ngôn sống”";
+      document.getElementById("mAvatar").src = user.avatar || "https://via.placeholder.com/240x280?text=IHSND";
+    }
+
+    function renderAdminTable() {
+      if (currentUser.role !== "admin") return;
+      document.getElementById("adminPanel").style.display = "block";
+      const tbody = document.getElementById("adminUserTable");
+      const users = getUsers();
+      tbody.innerHTML = users.map(u => `
+        <tr>
+          <td><strong>${u.username}</strong></td>
+          <td>${u.fullName}</td>
+          <td>${u.role}</td>
+          <td>${u.permissions.join(", ")}</td>
+          <td><button class="btn-sm secondary" onclick="viewMember('${u.username}')">Xem</button></td>
+        </tr>
+      `).join("");
+    }
+
+    function viewMember(username) {
+      const target = getUsers().find(u => u.username === username);
+      if (target) renderProfile(target);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function openEditModal() {
+      document.getElementById("eFullName").value = viewingUser.fullName || "";
+      document.getElementById("eClass").value = viewingUser.className || "";
+      document.getElementById("eFaculty").value = viewingUser.faculty || "";
+      document.getElementById("eDob").value = viewingUser.dob || "";
+      document.getElementById("ePhone").value = viewingUser.phone || "";
+      document.getElementById("eEmail").value = viewingUser.email || "";
+      document.getElementById("eQuote").value = viewingUser.quote || "";
+      document.getElementById("eAvatar").value = viewingUser.avatar || "";
+      document.getElementById("editModal").classList.add("active");
+    }
+
+    function closeEditModal() {
+      document.getElementById("editModal").classList.remove("active");
+    }
+
+    document.getElementById("editForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const users = getUsers();
+      const idx = users.findIndex(u => u.username === viewingUser.username);
+      if (idx >= 0) {
+        users[idx].fullName = document.getElementById("eFullName").value;
+        users[idx].className = document.getElementById("eClass").value;
+        users[idx].faculty = document.getElementById("eFaculty").value;
+        users[idx].dob = document.getElementById("eDob").value;
+        users[idx].phone = document.getElementById("ePhone").value;
+        users[idx].email = document.getElementById("eEmail").value;
+        users[idx].quote = document.getElementById("eQuote").value;
+        users[idx].avatar = document.getElementById("eAvatar").value;
+        saveUsers(users);
+        renderProfile(users[idx]);
+        renderAdminTable();
+        closeEditModal();
+      }
+    });
+
+    document.getElementById("excelInput").addEventListener("change", function (e) {
+      if (e.target.files.length) {
+        importUsersFromExcel(e.target.files[0], () => {
+          renderAdminTable();
+          e.target.value = "";
+        });
+      }
+    });
+
+    if (currentUser) {
+      renderProfile(currentUser);
+      renderAdminTable();
+    }
+  </script>
+</body>
+</html>
