@@ -152,7 +152,7 @@ function downloadExcelTemplate() {
   const sample = [
     {
       username: "21120002",
-      password: "123456",
+      password: "", // Để trống nếu không muốn đổi mật khẩu của tài khoản đã có
       role: "member",
       permissions: "member,activities,programs,info-station,milestones,contact",
       fullName: "Trần Thị B",
@@ -186,6 +186,8 @@ function importUsersFromExcel(file, onSuccess) {
         return;
       }
 
+      const existingUsers = await getUsers();
+      const existingSet = new Set(existingUsers.map(u => u.username.toLowerCase()));
       const batch = db.batch();
       let count = 0;
 
@@ -198,7 +200,6 @@ function importUsersFromExcel(file, onSuccess) {
 
         const userObj = {
           username: usernameStr,
-          password: String(row.password || "123456"),
           role: String(row.role || "member").toLowerCase(),
           permissions: perms,
           fullName: String(row.fullName || ""),
@@ -212,6 +213,13 @@ function importUsersFromExcel(file, onSuccess) {
           quote: String(row.quote || ""),
           avatar: String(row.avatar || "")
         };
+
+        // Chỉ cập nhật mật khẩu nếu Admin điền vào Excel, hoặc là tài khoản tạo mới lần đầu
+        if (row.password && String(row.password).trim() !== "") {
+          userObj.password = String(row.password).trim();
+        } else if (!existingSet.has(usernameStr.toLowerCase())) {
+          userObj.password = "123456";
+        }
 
         const ref = db.collection("users").doc(usernameStr.toLowerCase());
         batch.set(ref, userObj, { merge: true });
