@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thông tin thành viên - IHSND UMP</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- Thư viện đọc/ghi file Excel -->
   <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body class="bg-menu">
   <div id="topUserBar" class="top-user-bar"></div>
@@ -22,13 +23,11 @@
     <h1 class="page-title">THÔNG TIN THÀNH VIÊN</h1>
 
     <div class="member-layout">
-      <!-- Cột trái: Ảnh + Quote -->
       <div class="avatar-box">
-        <img id="mAvatar" class="avatar-img" src="https://via.placeholder.com/240x280?text=Avatar" alt="Avatar" />
-        <p id="mQuote" class="quote-text">“QUOTE YÊU THÍCH, CHÂM NGÔN SỐNG”</p>
+        <img id="mAvatar" class="avatar-img" src="https://via.placeholder.com/240x280?text=IHSND" alt="Avatar" />
+        <p id="mQuote" class="quote-text">“Đang tải...”</p>
       </div>
 
-      <!-- Cột phải: Các trường thông tin -->
       <div class="info-list">
         <div class="info-row"><span class="info-label">HỌ VÀ TÊN:</span><span id="mFullName" class="info-value"></span></div>
         <div class="info-row"><span class="info-label">LỚP:</span><span id="mClass" class="info-value"></span></div>
@@ -41,7 +40,6 @@
       </div>
     </div>
 
-    <!-- KHU VỰC RIÊNG CỦA ADMIN: UPLOAD EXCEL & QUẢN LÝ TÀI KHOẢN -->
     <div id="adminPanel" class="admin-panel" style="display: none;">
       <h3>⚙️ Bảng điều khiển Admin — Đồng bộ Excel & Phân quyền</h3>
       <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
@@ -67,7 +65,6 @@
     </div>
   </div>
 
-  <!-- Modal chỉnh sửa thông tin cá nhân -->
   <div id="editModal" class="modal-overlay">
     <div class="modal-box">
       <h3 style="color: var(--navy); margin-bottom: 16px;">Chỉnh sửa thông tin</h3>
@@ -90,8 +87,9 @@
 
   <script src="app.js"></script>
   <script>
-    const currentUser = requireAuth("member");
-    let viewingUser = currentUser;
+    let currentUser = null;
+    let viewingUser = null;
+    let allUsersCache = [];
 
     function renderProfile(user) {
       viewingUser = user;
@@ -107,29 +105,30 @@
       document.getElementById("mAvatar").src = user.avatar || "https://via.placeholder.com/240x280?text=IHSND";
     }
 
-    function renderAdminTable() {
-      if (currentUser.role !== "admin") return;
+    async function renderAdminTable() {
+      if (!currentUser || currentUser.role !== "admin") return;
       document.getElementById("adminPanel").style.display = "block";
+      allUsersCache = await getUsers();
       const tbody = document.getElementById("adminUserTable");
-      const users = getUsers();
-      tbody.innerHTML = users.map(u => `
+      tbody.innerHTML = allUsersCache.map(u => `
         <tr>
           <td><strong>${u.username}</strong></td>
           <td>${u.fullName}</td>
           <td>${u.role}</td>
-          <td>${u.permissions.join(", ")}</td>
+          <td>${(u.permissions || []).join(", ")}</td>
           <td><button class="btn-sm secondary" onclick="viewMember('${u.username}')">Xem</button></td>
         </tr>
       `).join("");
     }
 
     function viewMember(username) {
-      const target = getUsers().find(u => u.username === username);
+      const target = allUsersCache.find(u => u.username === username);
       if (target) renderProfile(target);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function openEditModal() {
+      if (!viewingUser) return;
       document.getElementById("eFullName").value = viewingUser.fullName || "";
       document.getElementById("eClass").value = viewingUser.className || "";
       document.getElementById("eFaculty").value = viewingUser.faculty || "";
@@ -145,39 +144,42 @@
       document.getElementById("editModal").classList.remove("active");
     }
 
-    document.getElementById("editForm").addEventListener("submit", function (e) {
+    document.getElementById("editForm").addEventListener("submit", async function (e) {
       e.preventDefault();
-      const users = getUsers();
-      const idx = users.findIndex(u => u.username === viewingUser.username);
-      if (idx >= 0) {
-        users[idx].fullName = document.getElementById("eFullName").value;
-        users[idx].className = document.getElementById("eClass").value;
-        users[idx].faculty = document.getElementById("eFaculty").value;
-        users[idx].dob = document.getElementById("eDob").value;
-        users[idx].phone = document.getElementById("ePhone").value;
-        users[idx].email = document.getElementById("eEmail").value;
-        users[idx].quote = document.getElementById("eQuote").value;
-        users[idx].avatar = document.getElementById("eAvatar").value;
-        saveUsers(users);
-        renderProfile(users[idx]);
-        renderAdminTable();
-        closeEditModal();
-      }
+      const updated = {
+        ...viewingUser,
+        fullName: document.getElementById("eFullName").value,
+        className: document.getElementById("eClass").value,
+        faculty: document.getElementById("eFaculty").value,
+        dob: document.getElementById("eDob").value,
+        phone: document.getElementById("ePhone").value,
+        email: document.getElementById("eEmail").value,
+        quote: document.getElementById("eQuote").value,
+        avatar: document.getElementById("eAvatar").value
+      };
+      await saveUser(updated);
+      renderProfile(updated);
+      await renderAdminTable();
+      closeEditModal();
+      alert("Đã lưu thông tin lên hệ thống!");
     });
 
     document.getElementById("excelInput").addEventListener("change", function (e) {
       if (e.target.files.length) {
-        importUsersFromExcel(e.target.files[0], () => {
-          renderAdminTable();
+        importUsersFromExcel(e.target.files[0], async () => {
+          await renderAdminTable();
           e.target.value = "";
         });
       }
     });
 
-    if (currentUser) {
-      renderProfile(currentUser);
-      renderAdminTable();
-    }
+    (async () => {
+      currentUser = await requireAuth("member");
+      if (currentUser) {
+        renderProfile(currentUser);
+        await renderAdminTable();
+      }
+    })();
   </script>
 </body>
 </html>
