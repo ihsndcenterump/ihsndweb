@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
 
 :root {
   --navy: #1b3664;
@@ -15,15 +15,16 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 body {
   min-height: 100vh;
   color: var(--text-main);
+  background-color: #9cb6e0;
   background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
+  background-position: top center;
+  background-size: 100% 100%;
   background-attachment: fixed;
   display: flex;
   flex-direction: column;
@@ -33,13 +34,14 @@ body {
 body.bg-login {
   background-image: url('bgnew.svg');
   justify-content: center;
-  padding: 130px 6% 90px;
+  padding: 150px 6% 90px;
 }
 
 /* Nền trang 2 trở đi (Menu & các trang con) */
 body.bg-menu {
   background-image: url('bg%20menu.svg');
-  padding: 95px 6% 85px;
+  padding: 105px 6% 85px;
+}
 }
 
 /* Thanh tài khoản góc trên bên phải (đè lên header của bg menu.svg) */
@@ -96,71 +98,71 @@ body.bg-menu {
 .login-container {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
-  gap: 48px;
+  gap: 56px;
   align-items: center;
-  max-width: 1180px;
+  max-width: 1320px;
   width: 100%;
   margin: 0 auto;
 }
 
 .intro-box p {
-  font-size: 18px;
-  line-height: 1.6;
-  margin-bottom: 22px;
+  font-size: 22px;
+  line-height: 1.65;
+  margin-bottom: 26px;
   text-align: justify;
 }
 
 .intro-box h3 {
-  font-size: 20px;
+  font-size: 24px;
   color: var(--navy);
   font-weight: 800;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .intro-box ul {
-  margin-left: 22px;
-  margin-bottom: 20px;
-  font-size: 15px;
-  line-height: 1.7;
+  margin-left: 24px;
+  margin-bottom: 24px;
+  font-size: 17px;
+  line-height: 1.8;
 }
 
 .intro-box .note {
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 .login-card {
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
-  border-radius: 24px;
-  padding: 36px 40px;
+  border-radius: 26px;
+  padding: 44px 48px;
   box-shadow: 0 10px 30px rgba(27, 54, 100, 0.12);
 }
 
 .login-card h1 {
   text-align: center;
   color: var(--navy);
-  font-size: 28px;
+  font-size: 34px;
   font-weight: 800;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .login-card .subtitle {
   text-align: center;
   color: var(--text-muted);
-  font-size: 15px;
-  margin-bottom: 24px;
+  font-size: 17px;
+  margin-bottom: 28px;
 }
 
 .form-group {
-  margin-bottom: 18px;
+  margin-bottom: 22px;
 }
 
 .form-group label {
   display: block;
   font-weight: 700;
   color: var(--navy);
-  font-size: 14px;
+  font-size: 16px;
   margin-bottom: 8px;
 }
 
@@ -170,10 +172,10 @@ body.bg-menu {
 .form-group input[type="date"],
 .form-group textarea {
   width: 100%;
-  padding: 12px 16px;
+  padding: 14px 18px;
   border: 1.5px solid rgba(27, 54, 100, 0.15);
-  border-radius: 12px;
-  font-size: 15px;
+  border-radius: 14px;
+  font-size: 16px;
   background: var(--white);
   outline: none;
 }
@@ -186,8 +188,8 @@ body.bg-menu {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 14px 0 22px;
-  font-size: 14px;
+  margin: 16px 0 26px;
+  font-size: 16px;
   color: var(--text-muted);
 }
 
@@ -196,24 +198,13 @@ body.bg-menu {
   background: var(--navy);
   color: var(--white);
   border: none;
-  padding: 13px 20px;
+  padding: 15px 22px;
   border-radius: 999px;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
 }
-
-.btn-primary:hover { background: var(--navy-dark); }
-.btn-primary:active { transform: scale(0.99); }
-
-.error-msg {
-  color: var(--danger);
-  font-size: 14px;
-  text-align: center;
-  margin-top: 12px;
-  min-height: 20px;
-  font-weight: 600;
 }
 
 /* ================= TRANG 2: MENU 6 MỤC ================= */
@@ -422,8 +413,14 @@ body.bg-menu {
 }
 
 @media (max-width: 900px) {
+  body.bg-login,
+  body.bg-menu {
+    background-image: linear-gradient(135deg, #c2e0e8 0%, #a5bce4 50%, #899bd9 100%);
+    padding: 80px 5% 40px;
+  }
   .login-container, .menu-grid, .member-layout {
     grid-template-columns: 1fr;
+    gap: 24px;
   }
   .info-row { flex-direction: column; gap: 2px; }
   .info-label { min-width: unset; }
