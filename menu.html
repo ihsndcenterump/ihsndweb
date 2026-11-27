@@ -8,52 +8,56 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
-<body class="bg-menu">
-  <div id="topUserBar" class="top-user-bar"></div>
+<body>
+  <header id="appHeader"></header>
 
-  <div class="menu-grid" id="menuGrid">
-    <a href="member.html" class="menu-card" data-module="member">
-      <div class="menu-card-header">THÔNG TIN THÀNH VIÊN</div>
-      <div class="menu-card-body">
-        Xem, chỉnh sửa, bổ sung thông tin cá nhân, trạng thái thành viên.
-      </div>
-    </a>
+  <main class="page-main">
+    <div class="menu-grid" id="menuGrid">
+      <a href="member.html" class="menu-card" data-module="member">
+        <div class="menu-card-header">THÔNG TIN THÀNH VIÊN</div>
+        <div class="menu-card-body">
+          Xem, chỉnh sửa, bổ sung thông tin cá nhân, trạng thái thành viên.
+        </div>
+      </a>
 
-    <a href="#" class="menu-card" data-module="activities" onclick="comingSoon(event, 'Xác nhận hoạt động')">
-      <div class="menu-card-header">XÁC NHẬN HOẠT ĐỘNG</div>
-      <div class="menu-card-body">
-        Kiểm tra, xin xác nhận các hoạt động đã tham gia.
-      </div>
-    </a>
+      <a href="#" class="menu-card" data-module="activities" onclick="comingSoon(event, 'Xác nhận hoạt động')">
+        <div class="menu-card-header">XÁC NHẬN HOẠT ĐỘNG</div>
+        <div class="menu-card-body">
+          Kiểm tra, xin xác nhận các hoạt động đã tham gia.
+        </div>
+      </a>
 
-    <a href="#" class="menu-card" data-module="programs" onclick="comingSoon(event, 'Chương trình sắp đến')">
-      <div class="menu-card-header">CHƯƠNG TRÌNH SẮP ĐẾN</div>
-      <div class="menu-card-body">
-        Theo dõi các chương trình hợp tác quốc tế sắp đến của Đoàn trường và Trung tâm.
-      </div>
-    </a>
+      <a href="#" class="menu-card" data-module="programs" onclick="comingSoon(event, 'Chương trình sắp đến')">
+        <div class="menu-card-header">CHƯƠNG TRÌNH SẮP ĐẾN</div>
+        <div class="menu-card-body">
+          Theo dõi các chương trình hợp tác quốc tế sắp đến của Đoàn trường và Trung tâm.
+        </div>
+      </a>
 
-    <a href="#" class="menu-card" data-module="info-station" onclick="comingSoon(event, 'Trạm thông tin')">
-      <div class="menu-card-header">TRẠM THÔNG TIN</div>
-      <div class="menu-card-body">
-        Các thông tin hữu ích cho việc trao đổi chuyên môn, trao đổi văn hóa quốc tế.
-      </div>
-    </a>
+      <a href="#" class="menu-card" data-module="info-station" onclick="comingSoon(event, 'Trạm thông tin')">
+        <div class="menu-card-header">TRẠM THÔNG TIN</div>
+        <div class="menu-card-body">
+          Các thông tin hữu ích cho việc trao đổi chuyên môn, trao đổi văn hóa quốc tế.
+        </div>
+      </a>
 
-    <a href="milestones.html" class="menu-card" data-module="milestones">
-      <div class="menu-card-header">DẤU ẤN TRUNG TÂM</div>
-      <div class="menu-card-body">
-        Nhìn lại hình ảnh, câu chuyện và các cột mốc nổi bật từ những chương trình đã diễn ra.
-      </div>
-    </a>
+      <a href="milestones.html" class="menu-card" data-module="milestones">
+        <div class="menu-card-header">DẤU ẤN TRUNG TÂM</div>
+        <div class="menu-card-body">
+          Nhìn lại hình ảnh, câu chuyện và các cột mốc nổi bật từ những chương trình đã diễn ra.
+        </div>
+      </a>
 
-    <a href="#" class="menu-card" data-module="contact" onclick="comingSoon(event, 'Liên hệ')">
-      <div class="menu-card-header">LIÊN HỆ</div>
-      <div class="menu-card-body">
-        Tiếp nhận trực tiếp các đề xuất hợp tác, yêu cầu hỗ trợ từ đối tác, sinh viên trong và ngoài nước.
-      </div>
-    </a>
-  </div>
+      <a href="#" class="menu-card" data-module="contact" onclick="comingSoon(event, 'Liên hệ')">
+        <div class="menu-card-header">LIÊN HỆ</div>
+        <div class="menu-card-body">
+          Tiếp nhận trực tiếp các đề xuất hợp tác, yêu cầu hỗ trợ từ đối tác, sinh viên trong và ngoài nước.
+        </div>
+      </a>
+    </div>
+  </main>
+
+  <footer id="appFooter"></footer>
 
   <script src="app.js"></script>
   <script>
