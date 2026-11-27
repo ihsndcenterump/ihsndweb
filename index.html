@@ -42,7 +42,10 @@
 
         <div class="form-group">
           <label for="password">MẬT KHẨU</label>
-          <input type="password" id="password" required autocomplete="current-password" />
+          <div class="password-wrapper">
+            <input type="password" id="password" required autocomplete="current-password" />
+            <button type="button" id="togglePwd" class="toggle-pwd-btn" title="Hiện/Ẩn mật khẩu">👁️</button>
+          </div>
         </div>
 
         <label class="remember-row">
@@ -58,10 +61,18 @@
 
   <script src="app.js"></script>
   <script>
-    // Nếu đã đăng nhập trước đó thì vào thẳng Menu
     if (getCurrentUser()) {
       window.location.href = "menu.html";
     }
+
+    // Nút hiện/ẩn mật khẩu
+    const pwdInput = document.getElementById("password");
+    const toggleBtn = document.getElementById("togglePwd");
+    toggleBtn.addEventListener("click", function () {
+      const isHidden = pwdInput.type === "password";
+      pwdInput.type = isHidden ? "text" : "password";
+      toggleBtn.textContent = isHidden ? "🙈" : "👁️";
+    });
 
     document.getElementById("loginForm").addEventListener("submit", function (e) {
       e.preventDefault();
