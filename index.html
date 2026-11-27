@@ -1,403 +1,81 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập - IHSND UMP</title>
-    <!-- Font Montserrat -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <!-- FontAwesome cho icon con mắt -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        :root {
-            --primary-bg: #b5c7e3;
-            --text-dark: #1e2b5e;
-            --box-bg: #e2eaf5;
-            --white: #ffffff;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        body {
-    background-image: url('background1.png'); /* Đổi tên này nếu file của bạn tên khác */
-    background-size: cover;        /* Phóng to ảnh lấp đầy màn hình */
-    background-position: center;   /* Căn giữa ảnh */
-    background-attachment: fixed;  /* Cố định ảnh nền khi cuộn trang */
-    background-repeat: no-repeat;  /* Không lặp lại ảnh */
-
-    /* Giữ nguyên các thuộc tính bên dưới */
-    color: var(--text-dark);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 40px;
-}
-        }
-
-        /* Header Layout */
-        header {
-header, main, footer {
-    width: 100%;
-    max-width: 1150px; /* Giới hạn chiều rộng để 2 bên xích lại gần nhau */
-    margin-left: auto; /* Tự động canh giữa lề trái */
-    margin-right: auto; /* Tự động canh giữa lề phải */
-}
-        }
-
-        .logos {
-            display: flex;
-            gap: 15px;
-        }
-
-        .logos img {
-            height: 60px;
-            width: auto;
-            border-radius: 50%; /* Dành cho logo tròn */
-            background-color: white; /* Placeholder nếu chưa có ảnh trong suốt */
-        }
-
-        .header-titles {
-            text-align: right;
-        }
-
-        .header-titles h2 {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-        
-        .header-titles h1 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .header-titles p {
-            font-size: 14px;
-            font-weight: 500;
-            color: #4a5c82;
-        }
-
-        /* Main Content Layout */
-        main {
-            display: flex;
-            gap: 40px;
-            flex: 1;
-            align-items: stretch;
-        }
-
-        /* Left Side: Info */
-        .info-section {
-            flex: 1.2;
-            padding: 20px 0;
-        }
-
-        .info-section > p.intro {
-            font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            font-weight: 500;
-            text-align: justify;
-        }
-
-        .contact-info h3 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
-
-        .contact-info ul {
-            list-style-type: disc;
-            margin-left: 20px;
-            margin-bottom: 30px;
-        }
-
-        .contact-info li {
-            margin-bottom: 8px;
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        .contact-info a {
-            color: var(--text-dark);
-            text-decoration: none;
-            transition: opacity 0.2s;
-        }
-
-        .contact-info a:hover {
-            opacity: 0.7;
-            text-decoration: underline;
-        }
-
-        .note {
-            font-size: 14px;
-            font-style: italic;
-            line-height: 1.5;
-        }
-
-        /* Right Side: Login Box */
-        .login-section {
-            flex: 0.8;
-            display: flex;
-            justify-content: center;
-        }
-
-        .login-box {
-            background-color: var(--box-bg);
-            border-radius: 20px;
-            padding: 40px 50px;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-
-        .login-box h2 {
-            text-align: center;
-            font-size: 26px;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-
-        .login-box p.subtitle {
-            text-align: center;
-            font-size: 14px;
-            margin-bottom: 30px;
-            font-weight: 500;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="password"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            outline: none;
-            background-color: var(--white);
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        /* Nút ẩn/hiện mật khẩu */
-        .toggle-password {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #888;
-        }
-
-        .toggle-password:hover {
-            color: var(--text-dark);
-        }
-
-        .remember-me {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 30px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .remember-me input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 15px;
-            background-color: var(--text-dark);
-            color: var(--white);
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .btn-submit:hover {
-            background-color: #0f1836;
-        }
-
-        /* Báo lỗi sai mật khẩu */
-        .error-message {
-            color: #d93025;
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 5px;
-            display: none; /* Ẩn mặc định */
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #5c6c8c;
-            padding-bottom: 10px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đăng nhập - IHSND UMP</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="bg-login">
+  <div class="login-container">
+    <!-- Cột trái: Giới thiệu & Liên hệ -->
+    <div class="intro-box">
+      <p>
+        Trung tâm Phát triển Mạng lưới Sinh viên Quốc tế - Đại học Y Dược Thành phố Hồ Chí Minh
+        được thành lập năm 2023, với mục tiêu và sứ mệnh mong muốn mang đến môi trường và các cơ hội
+        kết nối, hội nhập cho sinh viên Đại học Y Dược Thành phố Hồ Chí Minh.
+      </p>
 
-    <header>
-        <div class="logos">
-            <!-- Thay src bằng link ảnh hoặc file ảnh logo của bạn upload lên Github -->
-            <img src="logo-ump.png" alt="Logo UMP">
-            <img src="logo-doan.png" alt="Logo Đoàn">
-            <img src="logo-ihsnd.png" alt="Logo IHSND">
+      <h3>LIÊN HỆ VÀ HỖ TRỢ</h3>
+      <ul>
+        <li>Facebook: Mạng lưới Sinh viên Quốc tế - Đại học Y Dược TP. Hồ Chí Minh</li>
+        <li>Gmail: ihsnd.center.ump@gmail.com</li>
+        <li>Outlook: ihsnd.center.ump@gmail.com</li>
+      </ul>
+
+      <p class="note">
+        Trường hợp quên mật khẩu, vui lòng gửi email kèm MSSV và thông tin tài khoản.
+        Hệ thống <strong>không cấp lại mật khẩu tự động qua website.</strong>
+      </p>
+    </div>
+
+    <!-- Cột phải: Khung đăng nhập -->
+    <div class="login-card">
+      <h1>ĐĂNG NHẬP</h1>
+      <p class="subtitle">Đăng nhập để tiếp tục</p>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">TÊN ĐĂNG NHẬP/MSSV</label>
+          <input type="text" id="username" required autocomplete="username" />
         </div>
-        <div class="header-titles">
-            <h2>ĐOÀN ĐẠI HỌC Y DƯỢC THÀNH PHỐ HỒ CHÍ MINH</h2>
-            <h1>TRUNG TÂM PHÁT TRIỂN MẠNG LƯỚI SINH VIÊN QUỐC TẾ</h1>
-            <p>INTERNATIONAL HEALTH STUDENT NETWORK DEVELOPMENT CENTER</p>
-        </div>
-    </header>
 
-    <main>
-        <div class="info-section">
-            <p class="intro">
-                Trung tâm Phát triển Mạng lưới Sinh viên Quốc tế - Đại học Y Dược Thành phố Hồ Chí Minh được thành lập năm 2023, với mục tiêu và sứ mệnh mong muốn mang đến môi trường và các cơ hội kết nối, hội nhập cho sinh viên Đại học Y Dược Thành phố Hồ Chí Minh.
-            </p>
-            
-            <div class="contact-info">
-                <h3>LIÊN HỆ VÀ HỖ TRỢ</h3>
-                <ul>
-                    <li>Facebook: <a href="https://www.facebook.com/ihsnd.center.ump/" target="_blank">Mạng lưới Sinh viên Quốc tế - Đại học Y Dược TP. Hồ Chí Minh</a></li>
-                    <li>Gmail: <a href="mailto:ihsnd.center.ump@gmail.com">ihsnd.center.ump@gmail.com</a></li>
-                    <li>Outlook: <a href="mailto:ihsnd.center.ump@ump.edu.vn">ihsnd.center.ump@ump.edu.vn</a></li>
-                </ul>
-                <p class="note">
-                    Trường hợp quên mật khẩu, vui lòng gửi email kèm MSSV và thông tin tài khoản. Hệ thống <strong>không cấp lại mật khẩu tự động qua website</strong>.
-                </p>
-            </div>
+        <div class="form-group">
+          <label for="password">MẬT KHẨU</label>
+          <input type="password" id="password" required autocomplete="current-password" />
         </div>
 
-        <div class="login-section">
-            <div class="login-box">
-                <h2>ĐĂNG NHẬP</h2>
-                <p class="subtitle">Đăng nhập để tiếp tục</p>
+        <label class="remember-row">
+          <input type="checkbox" id="rememberMe" />
+          <span>Ghi nhớ phiên đăng nhập</span>
+        </label>
 
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="username">TÊN ĐĂNG NHẬP/MSSV</label>
-                        <input type="text" id="username" required>
-                    </div>
+        <button type="submit" class="btn-primary">Đăng nhập hệ thống →</button>
+        <div id="errorMsg" class="error-msg"></div>
+      </form>
+    </div>
+  </div>
 
-                    <div class="form-group">
-                        <label for="password">MẬT KHẨU</label>
-                        <div class="input-wrapper">
-                            <input type="password" id="password" required>
-                            <i class="fa-regular fa-eye toggle-password" id="togglePassword"></i>
-                        </div>
-                        <div class="error-message" id="errorMessage">Tài khoản hoặc mật khẩu không chính xác.</div>
-                    </div>
+  <script src="app.js"></script>
+  <script>
+    // Nếu đã đăng nhập trước đó thì vào thẳng Menu
+    if (getCurrentUser()) {
+      window.location.href = "menu.html";
+    }
 
-                    <label class="remember-me">
-                        <input type="checkbox" id="rememberMe">
-                        Ghi nhớ phiên đăng nhập
-                    </label>
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const u = document.getElementById("username").value;
+      const p = document.getElementById("password").value;
+      const rem = document.getElementById("rememberMe").checked;
 
-                    <button type="submit" class="btn-submit">
-                        Đăng nhập hệ thống <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </main>
-
-    <footer>
-        © 2026 TRUNG TÂM PHÁT TRIỂN MẠNG LƯỚI SINH VIÊN QUỐC TẾ<br>ĐẠI HỌC Y DƯỢC THÀNH PHỐ HỒ CHÍ MINH
-    </footer>
-
-    <!-- Xử lý Logic Javascript -->
-    <script>
-        // 1. Chức năng Hiển thị/Che mật khẩu (Dấu con mắt)
-        const togglePassword = document.querySelector('#togglePassword');
-        const passwordInput = document.querySelector('#password');
-
-        togglePassword.addEventListener('click', function () {
-            // Thay đổi type từ password sang text và ngược lại
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            // Đổi icon mắt chéo/mắt mở
-            this.classList.toggle('fa-eye-slash');
-        });
-
-        // 2. Chức năng Ghi nhớ đăng nhập (Sử dụng LocalStorage)
-        const usernameInput = document.querySelector('#username');
-        const rememberCheckbox = document.querySelector('#rememberMe');
-        const loginForm = document.querySelector('#loginForm');
-        const errorMessage = document.querySelector('#errorMessage');
-
-        // Kiểm tra xem trước đó có lưu username chưa
-        if (localStorage.getItem('ihsnd_saved_username')) {
-            usernameInput.value = localStorage.getItem('ihsnd_saved_username');
-            rememberCheckbox.checked = true;
-        }
-
-        // 3. Xử lý sự kiện khi nhấn form đăng nhập
-        loginForm.addEventListener('submit', function (e) {
-            e.preventDefault(); // Chặn tải lại trang
-            
-            const user = usernameInput.value;
-            const pass = passwordInput.value;
-
-            // Xử lý lưu tài khoản nếu check "Ghi nhớ"
-            if (rememberCheckbox.checked) {
-                localStorage.setItem('ihsnd_saved_username', user);
-            } else {
-                localStorage.removeItem('ihsnd_saved_username');
-            }
-
-            // Demo logic: Vì tài khoản do ban chủ nhiệm cấp, bạn có thể hardcode hoặc fetch API ở đây
-            // Ở đây demo với tài khoản 'admin' và mật khẩu 'admin123'
-            if (user === 'admin' && pass === 'admin123') {
-                errorMessage.style.display = 'none';
-                alert('Đăng nhập thành công! Đang chuyển hướng...');
-                // window.location.href = "dashboard.html"; // Mở khóa dòng này để chuyển trang
-            } else {
-                // Hiện thông báo sai mật khẩu như web bình thường
-                errorMessage.style.display = 'block';
-                // Reset ô password
-                passwordInput.value = '';
-                passwordInput.focus();
-            }
-        });
-    </script>
+      const user = login(u, p, rem);
+      if (user) {
+        window.location.href = "menu.html";
+      } else {
+        document.getElementById("errorMsg").textContent = "Sai tên đăng nhập hoặc mật khẩu!";
+      }
+    });
+  </script>
 </body>
 </html>
