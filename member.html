@@ -9,62 +9,66 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
-<body class="bg-menu">
-  <div id="topUserBar" class="top-user-bar"></div>
+<body>
+  <header id="appHeader"></header>
 
-  <div class="member-wrapper">
-    <div class="action-bar">
-      <a href="menu.html" class="back-btn">← Quay lại Menu</a>
-      <div style="display: flex; gap: 10px;">
-        <button id="btnChangePwd" class="btn-sm secondary" onclick="openPwdModal()">🔑 Đổi mật khẩu</button>
-        <button class="btn-sm" onclick="openEditModal()">✏️ Chỉnh sửa thông tin</button>
+  <main class="page-main align-top">
+    <div class="member-wrapper">
+      <div class="action-bar">
+        <a href="menu.html" class="back-btn">← Quay lại Menu</a>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button id="btnChangePwd" class="btn-sm secondary" onclick="openPwdModal()">🔑 Đổi mật khẩu</button>
+          <button class="btn-sm" onclick="openEditModal()">✏️ Chỉnh sửa thông tin</button>
+        </div>
+      </div>
+
+      <h1 class="page-title">THÔNG TIN THÀNH VIÊN</h1>
+
+      <div class="member-layout">
+        <div class="avatar-box">
+          <img id="mAvatar" class="avatar-img" src="https://via.placeholder.com/240x280?text=IHSND" alt="Avatar" />
+          <p id="mQuote" class="quote-text">“Đang tải...”</p>
+        </div>
+
+        <div class="info-list">
+          <div class="info-row"><span class="info-label">HỌ VÀ TÊN:</span><span id="mFullName" class="info-value"></span></div>
+          <div class="info-row"><span class="info-label">LỚP:</span><span id="mClass" class="info-value"></span></div>
+          <div class="info-row"><span class="info-label">TRƯỜNG/KHOA:</span><span id="mFaculty" class="info-value"></span></div>
+          <div class="info-row"><span class="info-label">MÃ SỐ SINH VIÊN:</span><span id="mMssv" class="info-value"></span></div>
+          <div class="info-row"><span class="info-label">NGÀY SINH:</span><span id="mDob" class="info-value"></span></div>
+          <div class="info-row"><span class="info-label">LÀ THÀNH VIÊN TRUNG TÂM TỪ NGÀY:</span><span id="mJoinDate" class="info-value"></span></div>
+          <div class="info-row"><span class="info-label">SĐT LIÊN LẠC:</span><span id="mPhone" class="info-value"></span></div>
+          <div class="info-row"><span class="info-label">EMAIL:</span><span id="mEmail" class="info-value"></span></div>
+        </div>
+      </div>
+
+      <div id="adminPanel" class="admin-panel" style="display: none;">
+        <h3>⚙️ Bảng điều khiển Admin — Đồng bộ Excel & Phân quyền</h3>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+          <button class="btn-sm secondary" onclick="downloadExcelTemplate()">📥 Tải file Excel mẫu</button>
+          <label class="btn-sm" style="cursor: pointer;">
+            📤 Upload file Excel đồng bộ
+            <input type="file" id="excelInput" accept=".xlsx,.xls" style="display: none;" />
+          </label>
+        </div>
+
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Tài khoản</th>
+              <th>Họ và tên</th>
+              <th>Vai trò</th>
+              <th>Quyền truy cập</th>
+              <th>Xem hồ sơ</th>
+            </tr>
+          </thead>
+          <tbody id="adminUserTable"></tbody>
+        </table>
       </div>
     </div>
+  </main>
 
-    <h1 class="page-title">THÔNG TIN THÀNH VIÊN</h1>
-
-    <div class="member-layout">
-      <div class="avatar-box">
-        <img id="mAvatar" class="avatar-img" src="https://via.placeholder.com/240x280?text=IHSND" alt="Avatar" />
-        <p id="mQuote" class="quote-text">“Đang tải...”</p>
-      </div>
-
-      <div class="info-list">
-        <div class="info-row"><span class="info-label">HỌ VÀ TÊN:</span><span id="mFullName" class="info-value"></span></div>
-        <div class="info-row"><span class="info-label">LỚP:</span><span id="mClass" class="info-value"></span></div>
-        <div class="info-row"><span class="info-label">TRƯỜNG/KHOA:</span><span id="mFaculty" class="info-value"></span></div>
-        <div class="info-row"><span class="info-label">MÃ SỐ SINH VIÊN:</span><span id="mMssv" class="info-value"></span></div>
-        <div class="info-row"><span class="info-label">NGÀY SINH:</span><span id="mDob" class="info-value"></span></div>
-        <div class="info-row"><span class="info-label">LÀ THÀNH VIÊN TRUNG TÂM TỪ NGÀY:</span><span id="mJoinDate" class="info-value"></span></div>
-        <div class="info-row"><span class="info-label">SĐT LIÊN LẠC:</span><span id="mPhone" class="info-value"></span></div>
-        <div class="info-row"><span class="info-label">EMAIL:</span><span id="mEmail" class="info-value"></span></div>
-      </div>
-    </div>
-
-    <div id="adminPanel" class="admin-panel" style="display: none;">
-      <h3>⚙️ Bảng điều khiển Admin — Đồng bộ Excel & Phân quyền</h3>
-      <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-        <button class="btn-sm secondary" onclick="downloadExcelTemplate()">📥 Tải file Excel mẫu</button>
-        <label class="btn-sm" style="cursor: pointer;">
-          📤 Upload file Excel đồng bộ
-          <input type="file" id="excelInput" accept=".xlsx,.xls" style="display: none;" />
-        </label>
-      </div>
-
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>Tài khoản</th>
-            <th>Họ và tên</th>
-            <th>Vai trò</th>
-            <th>Quyền truy cập</th>
-            <th>Xem hồ sơ</th>
-          </tr>
-        </thead>
-        <tbody id="adminUserTable"></tbody>
-      </table>
-    </div>
-  </div>
+  <footer id="appFooter"></footer>
 
   <!-- Modal chỉnh sửa thông tin -->
   <div id="editModal" class="modal-overlay">
