@@ -1,12 +1,26 @@
 // ============================================================
-// HỆ THỐNG DỮ LIỆU & PHÂN QUYỀN (IHSND - UMP)
+// KẾT NỐI FIREBASE FIRESTORE (IHSND - UMP)
 // ============================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyA8DJHQBsak8zgEgyD0VYGTYzIVfsoUS60",
+  authDomain: "ihsndweb.firebaseapp.com",
+  projectId: "ihsndweb",
+  storageBucket: "ihsndweb.firebasestorage.app",
+  messagingSenderId: "1071733740150",
+  appId: "1:1071733740150:web:d39a4064562702816d4557",
+  measurementId: "G-V47T2YQTWB"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
 
 const DEFAULT_USERS = [
   {
     username: "admin",
     password: "admin123",
-    role: "admin", // admin | member | guest
+    role: "admin",
     permissions: ["member", "activities", "programs", "info-station", "milestones", "contact"],
     fullName: "Quản trị viên IHSND",
     className: "Ban Điều Hành",
@@ -39,7 +53,6 @@ const DEFAULT_USERS = [
     username: "guest1",
     password: "guest",
     role: "guest",
-    // Admin có thể tùy chỉnh quyền riêng cho từng tài khoản guest
     permissions: ["programs", "info-station", "milestones", "contact"],
     fullName: "Khách mời Đối tác",
     className: "-",
@@ -54,52 +67,58 @@ const DEFAULT_USERS = [
   }
 ];
 
-const DB_KEY = "IHSND_USERS_DB";
 const SESSION_KEY = "IHSND_CURRENT_USER";
 
-// Lấy danh sách user
-function getUsers() {
-  const data = localStorage.getItem(DB_KEY);
-  if (!data) {
-    localStorage.setItem(DB_KEY, JSON.stringify(DEFAULT_USERS));
+// Lấy toàn bộ danh sách tài khoản từ Firestore
+async function getUsers() {
+  const snap = await db.collection("users").get();
+  if (snap.empty) {
+    const batch = db.batch();
+    DEFAULT_USERS.forEach(u => {
+      const ref = db.collection("users").doc(u.username.toLowerCase());
+      batch.set(ref, u);
+    });
+    await batch.commit();
     return DEFAULT_USERS;
   }
-  return JSON.parse(data);
+  return snap.docs.map(doc => doc.data());
 }
 
-// Lưu danh sách user
-function saveUsers(users) {
-  localStorage.setItem(DB_KEY, JSON.stringify(users));
+// Lưu 1 tài khoản lên Firestore
+async function saveUser(userObj) {
+  const docId = userObj.username.trim().toLowerCase();
+  await db.collection("users").doc(docId).set(userObj, { merge: true });
 }
 
 // Đăng nhập
-function login(username, password, remember) {
-  const users = getUsers();
+async function login(username, password, remember) {
+  const users = await getUsers();
   const found = users.find(
     u => u.username.toLowerCase() === username.trim().toLowerCase() && u.password === password
   );
   if (!found) return null;
 
   const storage = remember ? localStorage : sessionStorage;
-  storage.setItem(SESSION_KEY, found.username);
+  storage.setItem(SESSION_KEY, found.username.toLowerCase());
   return found;
 }
 
-// Lấy thông tin người đang đăng nhập
-function getCurrentUser() {
+// Lấy thông tin người đang đăng nhập từ Firestore
+async function getCurrentUser() {
   const username = sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY);
   if (!username) return null;
-  return getUsers().find(u => u.username === username) || null;
+  const doc = await db.collection("users").doc(username.toLowerCase()).get();
+  return doc.exists ? doc.data() : null;
 }
 
-// Bắt buộc đăng nhập (dùng cho các trang từ trang 2 trở đi)
-function requireAuth(requiredModule = null) {
-  const user = getCurrentUser();
+// Bắt buộc đăng nhập
+async function requireAuth(requiredModule = null) {
+  const user = await getCurrentUser();
   if (!user) {
     window.location.href = "index.html";
     return null;
   }
-  if (requiredModule && user.role !== "admin" && !user.permissions.includes(requiredModule)) {
+  if (requiredModule && user.role !== "admin" && !(user.permissions || []).includes(requiredModule)) {
     alert("Tài khoản của bạn không có quyền truy cập mục này.");
     window.location.href = "menu.html";
     return null;
@@ -115,7 +134,7 @@ function logout() {
   window.location.href = "index.html";
 }
 
-// Hiển thị tên tài khoản, chuông thông báo và nút đăng xuất ở góc trên phải
+// Hiển thị thanh tài khoản góc trên phải
 function renderTopUserBar(user) {
   const bar = document.getElementById("topUserBar");
   if (!bar) return;
@@ -127,7 +146,7 @@ function renderTopUserBar(user) {
 }
 
 // ============================================================
-// ĐỒNG BỘ FILE EXCEL (DÀNH CHO ADMIN)
+// ĐỒNG BỘ FILE EXCEL LÊN FIREBASE (DÀNH CHO ADMIN)
 // ============================================================
 function downloadExcelTemplate() {
   const sample = [
@@ -155,58 +174,57 @@ function downloadExcelTemplate() {
 
 function importUsersFromExcel(file, onSuccess) {
   const reader = new FileReader();
-  reader.onload = function (e) {
-    const data = new Uint8Array(e.target.result);
-    const workbook = XLSX.read(data, { type: "array" });
-    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-    const rows = XLSX.utils.sheet_to_json(firstSheet);
+  reader.onload = async function (e) {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+      const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(firstSheet);
 
-    if (!rows.length) {
-      alert("File Excel không có dữ liệu!");
-      return;
-    }
-
-    const users = getUsers();
-    let updatedCount = 0;
-    let addedCount = 0;
-
-    rows.forEach(row => {
-      if (!row.username) return;
-      const usernameStr = String(row.username).trim();
-      const perms = row.permissions
-        ? String(row.permissions).split(",").map(s => s.trim())
-        : ["member", "activities", "programs", "info-station", "milestones", "contact"];
-
-      const userObj = {
-        username: usernameStr,
-        password: String(row.password || "123456"),
-        role: String(row.role || "member").toLowerCase(),
-        permissions: perms,
-        fullName: String(row.fullName || ""),
-        className: String(row.className || ""),
-        faculty: String(row.faculty || ""),
-        mssv: String(row.mssv || usernameStr),
-        dob: String(row.dob || ""),
-        joinDate: String(row.joinDate || ""),
-        phone: String(row.phone || ""),
-        email: String(row.email || ""),
-        quote: String(row.quote || ""),
-        avatar: String(row.avatar || "")
-      };
-
-      const idx = users.findIndex(u => u.username.toLowerCase() === usernameStr.toLowerCase());
-      if (idx >= 0) {
-        users[idx] = { ...users[idx], ...userObj };
-        updatedCount++;
-      } else {
-        users.push(userObj);
-        addedCount++;
+      if (!rows.length) {
+        alert("File Excel không có dữ liệu!");
+        return;
       }
-    });
 
-    saveUsers(users);
-    alert(`Đồng bộ thành công! Thêm mới: ${addedCount}, Cập nhật: ${updatedCount}.`);
-    if (onSuccess) onSuccess();
+      const batch = db.batch();
+      let count = 0;
+
+      rows.forEach(row => {
+        if (!row.username) return;
+        const usernameStr = String(row.username).trim();
+        const perms = row.permissions
+          ? String(row.permissions).split(",").map(s => s.trim())
+          : ["member", "activities", "programs", "info-station", "milestones", "contact"];
+
+        const userObj = {
+          username: usernameStr,
+          password: String(row.password || "123456"),
+          role: String(row.role || "member").toLowerCase(),
+          permissions: perms,
+          fullName: String(row.fullName || ""),
+          className: String(row.className || ""),
+          faculty: String(row.faculty || ""),
+          mssv: String(row.mssv || usernameStr),
+          dob: String(row.dob || ""),
+          joinDate: String(row.joinDate || ""),
+          phone: String(row.phone || ""),
+          email: String(row.email || ""),
+          quote: String(row.quote || ""),
+          avatar: String(row.avatar || "")
+        };
+
+        const ref = db.collection("users").doc(usernameStr.toLowerCase());
+        batch.set(ref, userObj, { merge: true });
+        count++;
+      });
+
+      await batch.commit();
+      alert(`Đã đồng bộ thành công ${count} tài khoản lên hệ thống!`);
+      if (onSuccess) onSuccess();
+    } catch (err) {
+      console.error(err);
+      alert("Lỗi khi đồng bộ Excel: " + err.message);
+    }
   };
   reader.readAsArrayBuffer(file);
 }
