@@ -32,14 +32,22 @@ body {
 
 /* Nền trang 1 (Login) */
 body.bg-login {
-  background-image: url('bgnew.svg');
+  background-image:
+    url('bgnew.svg'),
+    linear-gradient(115deg, #c1e1e8 0%, #a6bfe2 50%, #8e9fd6 100%);
+  background-size: contain, cover;
+  background-position: top center, center center;
   justify-content: center;
   padding: 150px 6% 90px;
 }
 
 /* Nền trang 2 trở đi (Menu & các trang con) */
 body.bg-menu {
-  background-image: url('bg%20menu.svg');
+  background-image:
+    url('bg%20menu.svg'),
+    linear-gradient(115deg, #c1e1e8 0%, #a6bfe2 50%, #8e9fd6 100%);
+  background-size: contain, cover;
+  background-position: top center, center center;
   padding: 105px 6% 85px;
 }
 }
