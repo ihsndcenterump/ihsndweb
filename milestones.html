@@ -89,41 +89,45 @@
     }
   </style>
 </head>
-<body class="bg-menu">
-  <div id="topUserBar" class="top-user-bar"></div>
+<body>
+  <header id="appHeader"></header>
 
-  <div id="gridView" class="milestones-wrapper">
-    <div class="action-bar">
-      <a href="menu.html" class="back-btn">← Quay lại Menu</a>
-      <div id="adminCreateBar" style="display: none;">
-        <button class="btn-sm" onclick="openPostModal()">+ Đăng bài mới</button>
+  <main class="page-main align-top">
+    <div id="gridView" class="milestones-wrapper">
+      <div class="action-bar">
+        <a href="menu.html" class="back-btn">← Quay lại Menu</a>
+        <div id="adminCreateBar" style="display: none;">
+          <button class="btn-sm" onclick="openPostModal()">+ Đăng bài mới</button>
+        </div>
+      </div>
+
+      <h1 class="page-title">DẤU ẤN TRUNG TÂM</h1>
+      <div id="tagFilterBar" class="tag-filter-bar"></div>
+      <div id="milestonesGrid" class="milestones-grid">
+        <div class="empty-state">Đang tải dữ liệu...</div>
       </div>
     </div>
 
-    <h1 class="page-title">DẤU ẤN TRUNG TÂM</h1>
-    <div id="tagFilterBar" class="tag-filter-bar"></div>
-    <div id="milestonesGrid" class="milestones-grid">
-      <div class="empty-state">Đang tải dữ liệu...</div>
-    </div>
-  </div>
-
-  <div id="articleView" class="milestones-wrapper" style="display: none;">
-    <div class="action-bar">
-      <button class="back-btn" onclick="backToGrid()">← Quay lại danh sách Dấu ấn</button>
-      <div id="articleAdminActions" style="display: none; gap: 8px;">
-        <button class="btn-sm secondary" id="btnEditCurrent">✏️ Sửa bài</button>
-        <button class="btn-sm" style="background: var(--danger);" id="btnDeleteCurrent">🗑️ Xóa bài</button>
+    <div id="articleView" class="milestones-wrapper" style="display: none;">
+      <div class="action-bar">
+        <button class="back-btn" onclick="backToGrid()">← Quay lại danh sách Dấu ấn</button>
+        <div id="articleAdminActions" style="display: none; gap: 8px;">
+          <button class="btn-sm secondary" id="btnEditCurrent">✏️ Sửa bài</button>
+          <button class="btn-sm" style="background: var(--danger);" id="btnDeleteCurrent">🗑️ Xóa bài</button>
+        </div>
       </div>
-    </div>
 
-    <article class="article-container">
-      <div id="artMeta" class="article-meta"></div>
-      <h1 id="artTitle" class="article-title"></h1>
-      <p id="artLead" class="article-lead"></p>
-      <img id="artHero" class="article-hero-img" src="" alt="Ảnh bài viết" />
-      <div id="artBody" class="article-body"></div>
-    </article>
-  </div>
+      <article class="article-container">
+        <div id="artMeta" class="article-meta"></div>
+        <h1 id="artTitle" class="article-title"></h1>
+        <p id="artLead" class="article-lead"></p>
+        <img id="artHero" class="article-hero-img" src="" alt="Ảnh bài viết" />
+        <div id="artBody" class="article-body"></div>
+      </article>
+    </div>
+  </main>
+
+  <footer id="appFooter"></footer>
 
   <div id="postModal" class="modal-overlay">
     <div class="modal-box" style="max-width: 640px;">
