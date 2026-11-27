@@ -352,7 +352,8 @@ body.bg-menu {
 .info-label {
   font-weight: 800;
   color: #000;
-  min-width: 280px;
+  min-width: 380px;
+  flex-shrink: 0;
 }
 
 .info-value {
