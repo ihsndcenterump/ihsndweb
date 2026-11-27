@@ -24,17 +24,16 @@ body {
   background-color: #9cb6e0;
   background-repeat: no-repeat;
   background-position: top center;
-  background-size: 100% 100%;
-  background-attachment: fixed;
+  background-size: cover;
+  background-attachment: scroll; /* Nền cuộn theo trang, không bị đứng yên */
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 /* Nền trang 1 (Login) */
 body.bg-login {
   background-image: url('bgnew.svg');
-  background-size: cover;
-  background-position: top center;
   justify-content: center;
   padding: 150px 6% 90px;
 }
@@ -42,18 +41,16 @@ body.bg-login {
 /* Nền trang 2 trở đi (Menu & các trang con) */
 body.bg-menu {
   background-image: url('bg%20menu.svg');
-  background-size: cover;
-  background-position: top center;
-  padding: 105px 6% 85px;
-}
+  padding: 125px 6% 90px;
 }
 
-/* Thanh tài khoản góc trên bên phải (đè lên header của bg menu.svg) */
+/* Thanh tên tài khoản nằm gọn trên thanh ngang góc phải */
 .top-user-bar {
-  position: fixed;
-  top: 16px;
-  right: 36px;
+  position: absolute;
+  top: 22px;
+  right: 40px;
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 14px;
   z-index: 100;
@@ -67,7 +64,7 @@ body.bg-menu {
   border: none;
   cursor: pointer;
   color: var(--navy);
-  font-size: 20px;
+  font-size: 19px;
   display: flex;
   align-items: center;
   padding: 4px;
@@ -87,13 +84,12 @@ body.bg-menu {
   background: var(--navy);
   color: var(--white);
   border: none;
-  padding: 8px 16px;
+  padding: 9px 16px;
   border-radius: 8px;
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
   text-decoration: none;
-  margin-bottom: 16px;
 }
 
 .back-btn:hover { background: var(--navy-dark); }
@@ -188,6 +184,28 @@ body.bg-menu {
   border-color: var(--navy);
 }
 
+/* Ô mật khẩu có nút con mắt hiện/ẩn */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  padding-right: 48px;
+}
+
+.toggle-pwd-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--text-muted);
+  padding: 4px;
+}
+
 .remember-row {
   display: flex;
   align-items: center;
@@ -209,14 +227,25 @@ body.bg-menu {
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
 }
+
+.btn-primary:hover { background: var(--navy-dark); }
+.btn-primary:active { transform: scale(0.99); }
+
+.error-msg {
+  color: var(--danger);
+  font-size: 14px;
+  text-align: center;
+  margin-top: 12px;
+  min-height: 20px;
+  font-weight: 600;
 }
 
-/* ================= TRANG 2: MENU 6 MỤC ================= */
+/* ================= TRANG 2: MENU LƯỚI 3 CỘT ================= */
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 36px;
-  max-width: 1120px;
+  max-width: 1180px;
   width: 100%;
   margin: auto;
 }
@@ -323,7 +352,7 @@ body.bg-menu {
 .info-label {
   font-weight: 800;
   color: #000;
-  min-width: 260px;
+  min-width: 280px;
 }
 
 .info-value {
@@ -421,6 +450,11 @@ body.bg-menu {
   body.bg-menu {
     background-image: linear-gradient(135deg, #c2e0e8 0%, #a5bce4 50%, #899bd9 100%);
     padding: 80px 5% 40px;
+  }
+  .top-user-bar {
+    top: 16px;
+    right: 16px;
+    font-size: 13px;
   }
   .login-container, .menu-grid, .member-layout {
     grid-template-columns: 1fr;
