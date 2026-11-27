@@ -15,7 +15,8 @@
   <div class="member-wrapper">
     <div class="action-bar">
       <a href="menu.html" class="back-btn">← Quay lại Menu</a>
-      <div>
+      <div style="display: flex; gap: 10px;">
+        <button id="btnChangePwd" class="btn-sm secondary" onclick="openPwdModal()">🔑 Đổi mật khẩu</button>
         <button class="btn-sm" onclick="openEditModal()">✏️ Chỉnh sửa thông tin</button>
       </div>
     </div>
@@ -65,6 +66,7 @@
     </div>
   </div>
 
+  <!-- Modal chỉnh sửa thông tin -->
   <div id="editModal" class="modal-overlay">
     <div class="modal-box">
       <h3 style="color: var(--navy); margin-bottom: 16px;">Chỉnh sửa thông tin</h3>
@@ -80,6 +82,35 @@
         <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px;">
           <button type="button" class="btn-sm secondary" onclick="closeEditModal()">Hủy</button>
           <button type="submit" class="btn-sm">Lưu thay đổi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal đổi mật khẩu -->
+  <div id="pwdModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 440px;">
+      <h3 style="color: var(--navy); margin-bottom: 16px;">Đổi mật khẩu</h3>
+      <form id="pwdForm">
+        <div class="form-group">
+          <label>Mật khẩu hiện tại *</label>
+          <input type="password" id="oldPwd" required />
+        </div>
+        <div class="form-group">
+          <label>Mật khẩu mới (ít nhất 6 ký tự) *</label>
+          <input type="password" id="newPwd" minlength="6" required />
+        </div>
+        <div class="form-group">
+          <label>Nhập lại mật khẩu mới *</label>
+          <input type="password" id="confirmPwd" minlength="6" required />
+        </div>
+        <div id="pwdError" class="error-msg" style="margin-bottom: 10px;"></div>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
+          * Nếu quên mật khẩu hiện tại, vui lòng gửi email về <strong>ihsnd.center.ump@gmail.com</strong> kèm MSSV để Admin cấp lại.
+        </p>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button type="button" class="btn-sm secondary" onclick="closePwdModal()">Hủy</button>
+          <button type="submit" class="btn-sm">Cập nhật mật khẩu</button>
         </div>
       </form>
     </div>
@@ -144,6 +175,16 @@
       document.getElementById("editModal").classList.remove("active");
     }
 
+    function openPwdModal() {
+      document.getElementById("pwdForm").reset();
+      document.getElementById("pwdError").textContent = "";
+      document.getElementById("pwdModal").classList.add("active");
+    }
+
+    function closePwdModal() {
+      document.getElementById("pwdModal").classList.remove("active");
+    }
+
     document.getElementById("editForm").addEventListener("submit", async function (e) {
       e.preventDefault();
       const updated = {
@@ -164,6 +205,28 @@
       alert("Đã lưu thông tin lên hệ thống!");
     });
 
+    document.getElementById("pwdForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const oldPwd = document.getElementById("oldPwd").value;
+      const newPwd = document.getElementById("newPwd").value;
+      const confirmPwd = document.getElementById("confirmPwd").value;
+      const errEl = document.getElementById("pwdError");
+
+      if (oldPwd !== currentUser.password) {
+        errEl.textContent = "Mật khẩu hiện tại không đúng!";
+        return;
+      }
+      if (newPwd !== confirmPwd) {
+        errEl.textContent = "Mật khẩu nhập lại không khớp!";
+        return;
+      }
+
+      currentUser.password = newPwd;
+      await saveUser(currentUser);
+      closePwdModal();
+      alert("Đổi mật khẩu thành công! Vui lòng dùng mật khẩu mới cho lần đăng nhập sau.");
+    });
+
     document.getElementById("excelInput").addEventListener("change", function (e) {
       if (e.target.files.length) {
         importUsersFromExcel(e.target.files[0], async () => {
@@ -176,6 +239,9 @@
     (async () => {
       currentUser = await requireAuth("member");
       if (currentUser) {
+        if (currentUser.role === "guest") {
+          document.getElementById("btnChangePwd").style.display = "none";
+        }
         renderProfile(currentUser);
         await renderAdminTable();
       }
