@@ -669,3 +669,35 @@ html, body {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* ================= CẬP NHẬT DÀN CHỮ 1 HÀNG & ICON ĐƠN SẮC ================= */
+.login-header-text .org-line1,
+.login-header-text .org-line2,
+.login-header-text .org-line3,
+.sub-header-title {
+  white-space: nowrap;
+}
+
+.login-header-text .org-line1 { font-size: clamp(10px, 1.5vw, 22px); }
+.login-header-text .org-line2 { font-size: clamp(9.5px, 1.55vw, 24px); }
+.login-header-text .org-line3 { font-size: clamp(7.5px, 1.1vw, 16px); }
+.sub-header-title { font-size: clamp(9.5px, 1.35vw, 19px); }
+
+.toggle-pwd-btn,
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--navy);
+}
+
+@media (max-width: 960px) {
+  .login-header {
+    padding: 16px 10px;
+  }
+  .login-header-text .org-line1 { font-size: clamp(9.5px, 2.75vw, 16px); }
+  .login-header-text .org-line2 { font-size: clamp(8.8px, 2.45vw, 15px); }
+  .login-header-text .org-line3 { font-size: clamp(7px, 1.98vw, 12px); }
+  .sub-header-title { font-size: clamp(9px, 2.5vw, 15px); }
+}
