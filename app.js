@@ -128,20 +128,31 @@ function logout() {
   window.location.href = "index.html";
 }
 
-// Tự động vẽ Header (thanh trắng mờ + logo.svg + tài khoản) & Footer chung cho mọi trang con
+// Tự động vẽ Header (thanh trắng mờ + logonew.PNG + tài khoản) & Footer chung cho mọi trang con
 function renderAppLayout(user) {
   const headerEl = document.getElementById("appHeader");
   if (headerEl) {
     headerEl.className = "sub-header";
     headerEl.innerHTML = `
       <a href="menu.html" class="sub-header-brand" title="Về trang Menu">
-        <img src="logo.svg" alt="Logo IHSND" class="sub-header-logo" />
+        <img src="logonew.PNG" alt="Logo IHSND" class="sub-header-logo" />
         <span class="sub-header-title">TRUNG TÂM PHÁT TRIỂN MẠNG LƯỚI SINH VIÊN QUỐC TẾ</span>
       </a>
       <div class="sub-header-user">
         <span>${user.fullName} (${user.role.toUpperCase()})</span>
-        <button class="icon-btn" title="Thông báo" onclick="alert('Chưa có thông báo mới.')">🔔</button>
-        <button class="icon-btn" title="Đăng xuất" onclick="logout()">↪️</button>
+        <button class="icon-btn" title="Thông báo" aria-label="Thông báo" onclick="alert('Chưa có thông báo mới.')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+        </button>
+        <button class="icon-btn" title="Đăng xuất" aria-label="Đăng xuất" onclick="logout()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </button>
       </div>
     `;
   }
@@ -155,6 +166,7 @@ function renderAppLayout(user) {
     `;
   }
 }
+
 
 // ============================================================
 // ĐỒNG BỘ FILE EXCEL LÊN FIREBASE (DÀNH CHO ADMIN)
