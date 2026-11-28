@@ -12,7 +12,7 @@
   <div class="login-page-wrap">
     <!-- Thanh trắng mờ bo tròn trên cùng -->
     <header class="login-header">
-      <img src="logo.svg" alt="Logo IHSND UMP" class="login-header-logo" />
+      <img src="logonew.PNG" alt="Logo IHSND UMP" class="login-header-logo" />
       <div class="login-header-text">
         <div class="org-line1">ĐOÀN ĐẠI HỌC Y DƯỢC THÀNH PHỐ HỒ CHÍ MINH</div>
         <div class="org-line2">TRUNG TÂM PHÁT TRIỂN MẠNG LƯỚI SINH VIÊN QUỐC TẾ</div>
@@ -56,7 +56,12 @@
             <label for="password">MẬT KHẨU</label>
             <div class="password-wrapper">
               <input type="password" id="password" required autocomplete="current-password" />
-              <button type="button" id="togglePwd" class="toggle-pwd-btn" title="Hiện/Ẩn mật khẩu">👁️</button>
+              <button type="button" id="togglePwd" class="toggle-pwd-btn" title="Hiện/Ẩn mật khẩu" aria-label="Hiện/Ẩn mật khẩu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
             </div>
           </div>
 
@@ -85,12 +90,24 @@
       }
     })();
 
+    const EYE_OPEN_SVG = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>`;
+
+    const EYE_OFF_SVG = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+        <line x1="1" y1="1" x2="23" y2="23"></line>
+      </svg>`;
+
     const pwdInput = document.getElementById("password");
     const toggleBtn = document.getElementById("togglePwd");
     toggleBtn.addEventListener("click", function () {
       const isHidden = pwdInput.type === "password";
       pwdInput.type = isHidden ? "text" : "password";
-      toggleBtn.textContent = isHidden ? "🙈" : "👁️";
+      toggleBtn.innerHTML = isHidden ? EYE_OFF_SVG : EYE_OPEN_SVG;
     });
 
     document.getElementById("loginForm").addEventListener("submit", async function (e) {
